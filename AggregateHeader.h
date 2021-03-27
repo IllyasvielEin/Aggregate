@@ -26,6 +26,71 @@
 using namespace std;
 
 void distinguish(bool flag);
+void display(int num[], int size)
+{
+    for (int i = 0; i < size; ++i)
+    {
+        cout << num[i] << " ";
+    }
+    cout << endl;
+}
+void swap(int &a, int &b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+void sort(int *pNum, int size)
+{
+    int temp;
+    int loc;
+    for (int i = 0; i < size; ++i)
+    {
+        loc = i;
+        int min = pNum[i];
+        for (int j = i+1; j < size; ++j)
+        {
+            if ( pNum[j]<min )
+            {
+                min = pNum[j];
+                loc = j;
+            }
+        }
+        swap(pNum[i],pNum[loc]);
+    }
+}
+int Unique(int *pNum, int size)
+{
+    int tempSize = size;
+    for (int i = 0; i < size-1; ++i)
+    {
+        int flag = 0;
+        int j = i+1;
+        while ( pNum[i] == pNum[j] )
+        {
+            cout << pNum[i]  << " = " << pNum[j] << endl;
+            pNum[j] = 0;
+            tempSize--;
+            j++;
+        }
+    }
+//    display(pNum,size);
+    for (int i = 0; i < size-1; ++i)
+    {
+        if ( pNum[i] == 0 )
+        {
+            for (int j = i+1; j < size; ++j)
+            {
+                if ( pNum[j] != 0 )
+                {
+                    swap(pNum[i],pNum[j]);
+                    break;
+                }
+            }
+        }
+    }
+    return tempSize;
+}
 
 class Aggregate
 {
@@ -41,42 +106,75 @@ public:
     int whatSize() const { return size;};
     void display(ostream& os);
     void input(istream& is);
+    bool isSub(const Aggregate& B);
+    int find(const Aggregate& B);
 private:
-    int num[100]{};
+    int *num{};
     int size = 0;
 };
 
 void Aggregate::input(istream &is)
 {
-    int count = 0;
     int temp;
-    int tempArray[80] = {0};
-    while ( cin >> temp )
+    int it = 0;
+    int count = 10;
+    int *pNum = new int[count];
+
+    cout << "Enter aggregate:";
+    while ( cin >> temp, temp != 114514 )
     {
-        if (count == 80 )
+        if ( size > count )
         {
-            break;
+            int* pTemp = pNum;
+            count += 80;
+            pNum = new int[count];
+            memcpy(pNum,pTemp, sizeof(*pTemp));
         }
-        tempArray[count] = temp;
-        count++;
+        pNum[it] = temp;
+        it++;
+        size++;
+
     }
-    if ( count == 80 )
-    {
-        int biggerArray[160] = {0};
-        memcpy(biggerArray,tempArray,sizeof(tempArray));
-    }
+//    ::display(pNum,size);
+    sort(pNum,size);
+//    cout << "Sort: ";
+//    ::display(pNum,size);
+//    cout << "Unique:";
+    size = Unique(pNum,size);
+//    ::display(pNum,size);
+    num = pNum;
 }
 
 void Aggregate::display(ostream& os)
 {
-    os << "(";
-    for ( auto i : num )
+    os << "( ";
+    for (int i = 0; i<size ;i++ )
     {
-         os << i << " ";
+         os << num[i] << " ";
     }
     os << ")";
 }
 
+bool Aggregate::isSub(const Aggregate &B) {
+    if ( size > B.size )
+    {
+        cout << "The size of the first aggregate is bigger than the later.";
+        return false;
+    }
+    else if ( size == B.size && num[0] != B.num[0] )
+    {
+        return false;
+    }
+    else
+    {
+        int flag = 0;
+        for (int i = 0; i < B.size; ++i)
+        {
+            if ( )
+        }
+    }
+    return false;
+}
 
 
 #endif //AGGREGATE_AGGREGATEHEADER_H

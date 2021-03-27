@@ -4,10 +4,14 @@ int main() {
     Aggregate A;
     A.input(cin);
     A.display(cout);
-//    cout << A.whatSize();
-
+    cout << A.whatSize() << endl;
+    Aggregate B;
+    B.input(cin);
+    B.display(cout);
+    cout << B.whatSize() << endl;
     return 0;
 }
+
 
 void distinguish(bool flag)
 {
