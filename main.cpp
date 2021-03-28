@@ -1,14 +1,23 @@
 #include "AggregateHeader.h"
 
 int main() {
+//    int count = 10;
+//    int num[10] = {1,0,1,0,5,3,0,1,0,0};
+//    display(num,count);
+//    sort(num,count);
+//    display(num,count);
+//    Unique(num,count);
+//    display(num,count);
+
     Aggregate A;
     A.input(cin);
     A.display(cout);
-    cout << A.whatSize() << endl;
+    cout << " Size: " << A.whatSize() << endl;
     Aggregate B;
     B.input(cin);
     B.display(cout);
-    cout << B.whatSize() << endl;
+    cout << " Size: " << B.whatSize() << endl;
+    distinguish(A.isSub(B));
     return 0;
 }
 

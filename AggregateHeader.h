@@ -1,7 +1,3 @@
-//
-// Created by Milu Charle on 2021/3/26.
-//
-
 #ifndef AGGREGATE_AGGREGATEHEADER_H
 #define AGGREGATE_AGGREGATEHEADER_H
 #include <iostream>
@@ -42,7 +38,6 @@ void swap(int &a, int &b)
 }
 void sort(int *pNum, int size)
 {
-    int temp;
     int loc;
     for (int i = 0; i < size; ++i)
     {
@@ -57,39 +52,55 @@ void sort(int *pNum, int size)
             }
         }
         swap(pNum[i],pNum[loc]);
+//        display(pNum,5);
     }
 }
 int Unique(int *pNum, int size)
 {
+    int* pTemp = pNum;
     int tempSize = size;
-    for (int i = 0; i < size-1; ++i)
+    for (int i = 0; i < size; ++i)
     {
-        int flag = 0;
-        int j = i+1;
-        while ( pNum[i] == pNum[j] )
+        if (pTemp[i] == 114514 )
         {
-            cout << pNum[i]  << " = " << pNum[j] << endl;
-            pNum[j] = 0;
+            continue;
+        }
+        int j = i+1;
+        while (pTemp[i] == pTemp[j] )
+        {
+//            cout << pTemp[i]  << " = " << pTemp[j] << endl;
+            pTemp[j] = 114514;
             tempSize--;
             j++;
         }
     }
-//    display(pNum,size);
+//    display(pTemp,size);
     for (int i = 0; i < size-1; ++i)
     {
-        if ( pNum[i] == 0 )
+        if (pTemp[i] == 114514 )
         {
             for (int j = i+1; j < size; ++j)
             {
-                if ( pNum[j] != 0 )
+                if (pTemp[j] != 114514 )
                 {
-                    swap(pNum[i],pNum[j]);
+                    swap(pTemp[i], pTemp[j]);
                     break;
                 }
             }
         }
     }
+//    cout << tempSize << endl;
+    display(pTemp,size);
+    pNum = new int[tempSize];
+    memcpy(pNum,pTemp,sizeof(int)*tempSize);
+//    delete pTemp;
     return tempSize;
+}
+void swap(int *a, int *b)
+{
+    auto temp = a;
+    a = b;
+    b = temp;
 }
 
 class Aggregate
@@ -123,17 +134,17 @@ void Aggregate::input(istream &is)
     cout << "Enter aggregate:";
     while ( cin >> temp, temp != 114514 )
     {
-        if ( size > count )
+        if ( size == count )
         {
             int* pTemp = pNum;
             count += 80;
             pNum = new int[count];
-            memcpy(pNum,pTemp, sizeof(*pTemp));
+            memcpy(pNum, pTemp, sizeof(int)*10 );
+            pTemp = nullptr;
         }
         pNum[it] = temp;
         it++;
         size++;
-
     }
 //    ::display(pNum,size);
     sort(pNum,size);
@@ -167,13 +178,42 @@ bool Aggregate::isSub(const Aggregate &B) {
     }
     else
     {
-        int flag = 0;
-        for (int i = 0; i < B.size; ++i)
+        int tag;
+        tag = find(B);
+//        cout << "tag: " << tag << endl;
+        if ( tag == -1 )
         {
-            if ( )
+            return false;
+        }
+        else
+        {
+            int mark = 0;
+            for (int i = 0; i<size && tag < B.size ; ++i,tag++)
+            {
+                if ( num[i] == B.num[tag])
+                {
+                    mark++;
+//                    cout << "mark: " << mark << endl;
+                }
+            }
+            if ( mark != size)
+            {
+                return false;
+            }
         }
     }
-    return false;
+    return true;
+}
+
+int Aggregate::find(const Aggregate &B) {
+    for (int i = 0; i < B.size; ++i)
+    {
+        if ( num[0] == B.num[i] )
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 
