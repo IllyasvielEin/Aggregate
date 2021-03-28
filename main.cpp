@@ -9,22 +9,24 @@ int main() {
 //    Unique(num,count);
 //    display(num,count);
 
-    int numA[4] = { 1,2,3,4 };
-    int numB[2] = { 4,5 };
+//    Aggregate A;
+//    A.input(cin);
+//    A.display(cout);
+//    cout << " Size: " << A.whatSize() << endl;
+//    Aggregate B;
+//    B.input(cin);
+//    B.display(cout);
+//    cout << " Size: " << B.whatSize() << endl;
+//
+//    Aggregate C;
+//    C = A.DiffAgg(B) ;
+//    C.display(cout);
+//    cout << " Size: " << C.whatSize() << endl;
 
-    Aggregate A;
-    A.input(cin);
-    A.display(cout);
-    cout << " Size: " << A.whatSize() << endl;
-    Aggregate B;
-    B.input(cin);
-    B.display(cout);
-    cout << " Size: " << B.whatSize() << endl;
-
-    Aggregate C;
-    C = A.Union(B) ;
-    C.display(cout);
-    cout << " Size: " << C.whatSize() << endl;
+    int A[18] = {1,1,2,2,2,3,4,5,5,5,6,6,7,7,8,8,8,9};
+    int size = deleRepe(A,18);
+    display(A,size);
+    system("pause");
     return 0;
 }
 

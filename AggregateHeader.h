@@ -89,12 +89,42 @@ int Unique(int *pNum, int size)
         }
     }
     return tempSize;
-}
+}   //可以对size使用引用
 void swap(int *a, int *b)
 {
     auto temp = a;
     a = b;
     b = temp;
+}
+int deleRepe(int *p, int size)
+{
+    int repe = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        int j = i+1;
+        if ( p[i] == p[j] )
+        {
+            cout << p[i] << " = " << p[j] << endl;
+            repe++;
+        }
+        else
+        {
+            p[j-repe] = p[j];
+        }
+    }
+    return size-=repe;
+}
+int UnionA(int *A, int *B, int sizeA, int sizeB)
+{
+    int repe = 0;
+    for (int i = 0; i < sizeA; ++i) {
+        for (int j = 0; j < sizeB; ++j) {
+            if ( A[i] == B[j] )
+            {
+                repe++;
+            }
+        }
+    }
 }
 
 class Aggregate
@@ -116,6 +146,7 @@ public:
     int find(const Aggregate& B);
     Aggregate Intersect(const Aggregate& B);
     Aggregate Union(const Aggregate& B);
+    Aggregate DiffAgg(const Aggregate& B);
 private:
     int *num{};
     int size = 0;
@@ -155,12 +186,17 @@ void Aggregate::input(istream &is)
 
 void Aggregate::display(ostream& os)
 {
+
     os << "( ";
     for (int i = 0; i<size ;i++ )
     {
          os << num[i] << " ";
     }
     os << ")";
+    if ( size == 0)
+    {
+        cout << "->Empty aggregate." << endl;
+    }
 }
 
 bool Aggregate::isSub(const Aggregate &B) {
@@ -215,6 +251,29 @@ int Aggregate::find(const Aggregate &B) {
 
 Aggregate Aggregate::Intersect(const Aggregate& B)
 {
+    int it = 0;
+    int temp[100];
+    int totalSize = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        for (int j = 0; j < B.size; ++j)
+        {
+            if ( num[i] == B.num[j] )
+            {
+                temp[it] = num[i];
+                totalSize++;
+                it++;
+            }
+        }
+    }
+    int* p = new int[totalSize];
+    memcpy(p,temp,sizeof(int)*totalSize);
+    sort(p,totalSize);
+    totalSize = Unique(p,totalSize);
+    return Aggregate(p,totalSize);
+}
+
+Aggregate Aggregate::Union(const Aggregate &B) {
     int totalSize = size+B.size;
     int* pTemp = new int[size+B.size];
     memcpy(pTemp,num,size*sizeof(int) );
@@ -235,27 +294,27 @@ Aggregate Aggregate::Intersect(const Aggregate& B)
     return Aggregate(pTemp,totalSize);
 }
 
-Aggregate Aggregate::Union(const Aggregate &B) {
-    int it = 0;
-    int temp[100];
-    int totalSize = 0;
-    for (int i = 0; i < size; ++i)
+Aggregate Aggregate::DiffAgg(const Aggregate &B) {
+    Aggregate interC = Intersect(B);
+    Aggregate uniD = Union(B);
+
+    int diffCount = uniD.size;
+    for (int i = 0; i < uniD.size ; ++i)
     {
-        for (int j = 0; j < B.size; ++j)
+        for (int j = 0; j < interC.size ; ++j)
         {
-            if ( num[i] == B.num[j] )
+            if ( interC.num[i] == uniD.num[j] )
             {
-                temp[it] = num[i];
-                totalSize++;
-                it++;
+                uniD.num[i] = 114514;
+                diffCount--;
             }
         }
     }
-    int* p = new int[totalSize];
-    memcpy(p,temp,sizeof(int)*totalSize);
-    sort(p,totalSize);
-    Unique(p,totalSize);
-    return Aggregate(p,totalSize);
+//    cout << "interC: ";
+    sort(uniD.num,uniD.size);
+    int *p = new int[diffCount];
+    memcpy(p,uniD.num, sizeof(int)*diffCount);
+    return Aggregate(p,diffCount);
 }
 
 #endif //AGGREGATE_AGGREGATEHEADER_H
