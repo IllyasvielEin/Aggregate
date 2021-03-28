@@ -114,17 +114,25 @@ int deleRepe(int *p, int size)
     }
     return size-=repe;
 }
-int UnionA(int *A, int *B, int sizeA, int sizeB)
+int UnionA(int *A, const int *B, int sizeA, int sizeB)
 {
     int repe = 0;
+    int distance = 0;
     for (int i = 0; i < sizeA; ++i) {
         for (int j = 0; j < sizeB; ++j) {
             if ( A[i] == B[j] )
             {
+                A[i-distance] = A[i];
                 repe++;
+                distance = 0;
+            }
+            else
+            {
+                distance++;
             }
         }
     }
+    return sizeA-=repe;
 }
 
 class Aggregate

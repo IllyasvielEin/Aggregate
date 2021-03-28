@@ -23,9 +23,12 @@ int main() {
 //    C.display(cout);
 //    cout << " Size: " << C.whatSize() << endl;
 
-    int A[18] = {1,1,2,2,2,3,4,5,5,5,6,6,7,7,8,8,8,9};
-    int size = deleRepe(A,18);
-    display(A,size);
+
+    int A[5] = {1,2,3,4,5};
+    int B[2] = {4,5};
+    int sizeA = UnionA(A,B,5,2);
+    display(A,sizeA);
+
     system("pause");
     return 0;
 }
