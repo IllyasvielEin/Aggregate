@@ -9,6 +9,9 @@ int main() {
 //    Unique(num,count);
 //    display(num,count);
 
+    int numA[4] = { 1,2,3,4 };
+    int numB[2] = { 4,5 };
+
     Aggregate A;
     A.input(cin);
     A.display(cout);
@@ -17,7 +20,11 @@ int main() {
     B.input(cin);
     B.display(cout);
     cout << " Size: " << B.whatSize() << endl;
-    distinguish(A.isSub(B));
+
+    Aggregate C;
+    C = A.Union(B) ;
+    C.display(cout);
+    cout << " Size: " << C.whatSize() << endl;
     return 0;
 }
 

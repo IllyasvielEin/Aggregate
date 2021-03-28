@@ -22,7 +22,7 @@
 using namespace std;
 
 void distinguish(bool flag);
-void display(int num[], int size)
+void display(int *num, int size)
 {
     for (int i = 0; i < size; ++i)
     {
@@ -57,43 +57,37 @@ void sort(int *pNum, int size)
 }
 int Unique(int *pNum, int size)
 {
-    int* pTemp = pNum;
     int tempSize = size;
     for (int i = 0; i < size; ++i)
     {
-        if (pTemp[i] == 114514 )
+        if (pNum[i] == 114514 )
         {
             continue;
         }
         int j = i+1;
-        while (pTemp[i] == pTemp[j] )
+        while (pNum[i] == pNum[j] )
         {
-//            cout << pTemp[i]  << " = " << pTemp[j] << endl;
-            pTemp[j] = 114514;
+//            cout << pNum[i]  << " = " << pNum[j] << endl;
+            pNum[j] = 114514;
             tempSize--;
             j++;
         }
     }
-//    display(pTemp,size);
+//    display(pNum,size);
     for (int i = 0; i < size-1; ++i)
     {
-        if (pTemp[i] == 114514 )
+        if (pNum[i] == 114514 )
         {
             for (int j = i+1; j < size; ++j)
             {
-                if (pTemp[j] != 114514 )
+                if (pNum[j] != 114514 )
                 {
-                    swap(pTemp[i], pTemp[j]);
+                    swap(pNum[i], pNum[j]);
                     break;
                 }
             }
         }
     }
-//    cout << tempSize << endl;
-    display(pTemp,size);
-    pNum = new int[tempSize];
-    memcpy(pNum,pTemp,sizeof(int)*tempSize);
-//    delete pTemp;
     return tempSize;
 }
 void swap(int *a, int *b)
@@ -107,10 +101,11 @@ class Aggregate
 {
 public:
     Aggregate() = default;
+    Aggregate(int *p,int n):num(p),size(n){};
     Aggregate& operator=(Aggregate B)
     {
-        swap(num,B.num);
-        swap(size,B.size);
+        num = B.num;
+        size = B.size;
         return *this;
     }
 
@@ -119,6 +114,8 @@ public:
     void input(istream& is);
     bool isSub(const Aggregate& B);
     int find(const Aggregate& B);
+    Aggregate Intersect(const Aggregate& B);
+    Aggregate Union(const Aggregate& B);
 private:
     int *num{};
     int size = 0;
@@ -216,5 +213,49 @@ int Aggregate::find(const Aggregate &B) {
     return -1;
 }
 
+Aggregate Aggregate::Intersect(const Aggregate& B)
+{
+    int totalSize = size+B.size;
+    int* pTemp = new int[size+B.size];
+    memcpy(pTemp,num,size*sizeof(int) );
+    memcpy(pTemp+size,B.num,B.size* sizeof(int) );
+//    ::display(pNum,size+B.size);
+//    ::display(pNum,totalSize);
+    sort(pTemp,totalSize);
+//    ::display(pNum,totalSize);
+//    cout << "TotalSize: " << totalSize;
+    totalSize = Unique(pTemp,totalSize);
+    int *p = new int[totalSize];
+    memcpy(p,pTemp,sizeof(int)*totalSize);
+    delete[] pTemp;
+    pTemp = p;
+//    cout << "Unique TotalSize: " << totalSize;
+//    cout << "Intersect inside num: ";
+//    ::display(pTemp,totalSize+4);
+    return Aggregate(pTemp,totalSize);
+}
+
+Aggregate Aggregate::Union(const Aggregate &B) {
+    int it = 0;
+    int temp[100];
+    int totalSize = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        for (int j = 0; j < B.size; ++j)
+        {
+            if ( num[i] == B.num[j] )
+            {
+                temp[it] = num[i];
+                totalSize++;
+                it++;
+            }
+        }
+    }
+    int* p = new int[totalSize];
+    memcpy(p,temp,sizeof(int)*totalSize);
+    sort(p,totalSize);
+    Unique(p,totalSize);
+    return Aggregate(p,totalSize);
+}
 
 #endif //AGGREGATE_AGGREGATEHEADER_H
