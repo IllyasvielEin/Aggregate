@@ -23,12 +23,13 @@ int main() {
 //    C.display(cout);
 //    cout << " Size: " << C.whatSize() << endl;
 
+    int B[5] = {1,2,3,4,5};
+    int A[3] = {2,3,6};
 
-    int A[5] = {1,2,3,4,5};
-    int B[2] = {4,5};
-    int sizeA = UnionA(A,B,5,2);
+    int sizeA;
+    sizeA = UnionA(A,B,3,5);
+    cout << "sizeA: " << sizeA;
     display(A,sizeA);
-
     system("pause");
     return 0;
 }
